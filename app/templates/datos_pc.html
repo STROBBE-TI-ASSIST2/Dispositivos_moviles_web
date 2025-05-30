@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Registro de Mantenimiento</title>
+  <script src="https://unpkg.com/html5-qrcode"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/formulario_mante_pc.css') }}" />
+</head>
+<body>
+  <div class="form-container">
+
+    <button id="btn-back" type="button" onclick="window.history.back()">
+      ← Volver
+    </button>
+
+    <h2>Registro de Mantenimiento</h2>
+
+    <label class="lblQr">Escanea el QR:</label>
+    <div id="reader"></div>
+
+    <form onsubmit="enviarDatos(); return false;">
+      <label>Código STB</label>
+      <input type="text" id="codigo_stb" placeholder="Código STB" />
+
+      <label>Nombre del Equipo</label>
+      <input type="text" id="nombre_equipo" placeholder="Nombre del equipo" />
+
+      <label>IP</label>
+      <input type="text" id="ip" placeholder="Dirección IP" />
+
+      <label>Sistema Operativo</label>
+      <input type="text" id="sistema_operativo" placeholder="Sistema operativo" />
+
+      <label>Procesador</label>
+      <input type="text" id="procesador" placeholder="Procesador" />
+
+      <label>Memoria RAM</label>
+      <input type="text" id="ram" placeholder="RAM" />
+
+      <label>Office</label>
+      <input type="text" id="office" placeholder="Versión de Office" />
+
+      <label>Reporte:</label>
+      <textarea id="reporte" rows="4" placeholder="Escribe el reporte aquí"></textarea>
+
+      <label>Acción Correctiva:</label>
+      <textarea id="accion" rows="4" placeholder="Escribe la acción correctiva aquí"></textarea>
+
+      <button type="submit">Enviar Datos</button>
+    </form>
+
+    <p id="respuesta"></p>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/datos_pc.js') }}"></script>
+</body>
+</html>

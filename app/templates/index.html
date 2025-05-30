@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - Reserva de Salas</title>
+  <link rel="stylesheet" href="static/css/styles.css" />
+</head>
+<body>
+  <div class="login-container">
+    <div class="user-icon">
+      <img src="static/Imagenes/logo.png" alt="Logo de la empresa" />
+    </div>
+    <h2>Iniciar sesión</h2>
+    <form id="login-form" action="/login" method="POST">
+      <label for="username">Usuario:</label>
+      <input type="text" id="username" name="username" required />
+
+      <label for="password">Contraseña:</label>
+      <input type="password" id="password" name="password" required />
+
+      <button type="submit">Iniciar sesión</button>
+    </form>
+  </div>
+  <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</body>
+</html>
