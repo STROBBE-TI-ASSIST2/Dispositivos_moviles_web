@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, jsonify, redirect, session, url_for
 import sqlite3
-
+from flask_migrate import Migrate
 import sqlite3
 from app.utils.db import db, db_uri
 
@@ -22,6 +22,7 @@ def create_app():
 
     # Importar modelos antes de crear las tablas
     from app.models import model_user
+    migrate = Migrate(app, db)
 
     with app.app_context():
         db.create_all()
