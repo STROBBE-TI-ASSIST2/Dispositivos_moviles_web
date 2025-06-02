@@ -1,6 +1,4 @@
-from flask import Blueprint, request, jsonify, session,render_template,redirect,url_for, flash
-from app.models.mantenimento_pc import Mantenimiento_equipos
-from app import db
+from flask import Blueprint, session,render_template,redirect,url_for
 
 menu_bp = Blueprint('menu', __name__)
 @menu_bp.route('/menu')

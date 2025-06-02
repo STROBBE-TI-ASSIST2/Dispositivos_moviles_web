@@ -22,9 +22,5 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-  const boton = document.getElementById('boton-formulario');
-  boton.addEventListener('click', () => {
-    window.location.href = "/formulario"; // o usa url_for en plantilla
-  });
-});
+
+

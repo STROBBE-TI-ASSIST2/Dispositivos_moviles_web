@@ -1,7 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import create_engine
 import urllib
-import pyodbc
+
 
 import os
 from dotenv import load_dotenv

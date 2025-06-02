@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, session,render_template,redirect,url_for, flash
+from flask import Blueprint, request, jsonify, session,render_template,redirect,url_for
 from app.models.mantenimento_pc import Mantenimiento_equipos
 from app import db
 
@@ -10,9 +10,12 @@ def formulario():
         return redirect(url_for('auth.index'))  # Redirige a login si no hay sesión
     return render_template('datos_pc.html', usuario=session['usuario'])'''
 
+#Mostrar formulario
 @form_bp.route('/formulario')
 def formulario():
     return render_template('datos_pc.html')
+
+#Guardar los datos del formulario en la base de datos
 @form_bp.route('/formulario', methods=['POST'])
 def guardar_datos():
     if 'usuario' not in session:
@@ -33,7 +36,6 @@ def guardar_datos():
     accion_correctiva = data.get('accion_correctiva')
 
     # Validaciones básicas
-    # Validaciones
     if not reporte or not accion_correctiva:
         return jsonify({'success': False, 'message': 'Campos obligatorios faltantes'}), 400
 
@@ -50,3 +52,9 @@ def guardar_datos():
     db.session.commit()
 
     return jsonify({'mensaje': 'Datos guardados correctamente'}), 200
+
+#Consultar los datos del mantenimiento
+@form_bp.route('/consulta-mantenimientos', methods=['GET'])
+def consulta_mantenimientos():
+    registros = Mantenimiento_equipos.query.all()
+    return render_template('consulta_mante.html', registros=registros)

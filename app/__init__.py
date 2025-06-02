@@ -1,9 +1,6 @@
-from flask import Flask, render_template, request, jsonify, redirect, session, url_for
-import sqlite3
+from flask import Flask
 from flask_migrate import Migrate
-import sqlite3
 from app.utils.db import db, db_uri
-
 
 def create_app():
 
@@ -33,6 +30,5 @@ def create_app():
     app.register_blueprint(main_bp)
     app.register_blueprint(form_bp)
     app.register_blueprint(menu_bp)
-
 
     return app

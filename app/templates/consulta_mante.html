@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Consulta de Mantenimientos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/formulario_mante_pc.css') }}" />
+</head>
+<body>
+<div class="container">
+    <button id="btn-back" type="button" onclick="window.history.back()">
+      ← Volver
+    </button>
+
+    <h2>Consulta de Registros de Mantenimiento</h2>
+
+    <table class="tabla-registros">
+        <thead>
+            <tr>
+                <th>Código STB</th>
+                <th>Nombre del Equipo</th>
+                <th>IP</th>
+                <th>Sistema Operativo</th>
+                <th>Procesador</th>
+                <th>RAM</th>
+                <th>Office</th>
+                <th>Reporte:</th>
+                <th>Acción Correctiva:</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for registro in registros %}
+            <tr>
+                <td>{{ registro.codigo_stb }}</td>
+                <td>{{ registro.nombre_equipo }}</td>
+                <td>{{ registro.ip }}</td>
+                <td>{{ registro.sistema_operativo }}</td>
+                <td>{{ registro.procesador }}</td>
+                <td>{{ registro.ram }}</td>
+                <td>{{ registro.office }}</td>
+                <td>{{ registro.reporte }}</td>
+                <td>{{ registro.accion_correctiva}}</td>
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

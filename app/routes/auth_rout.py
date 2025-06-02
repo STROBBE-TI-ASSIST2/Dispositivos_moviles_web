@@ -1,6 +1,5 @@
-from flask import Blueprint, request, jsonify, session,render_template,redirect,url_for
+from flask import Blueprint, request, jsonify, session,render_template,url_for
 from app.models.model_user import Usuario
-from app.utils.db import db
 
 auth_bp = Blueprint('auth', __name__)
 main_bp = Blueprint('main', __name__)
