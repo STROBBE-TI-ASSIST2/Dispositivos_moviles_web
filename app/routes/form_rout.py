@@ -58,3 +58,5 @@ def guardar_datos():
 def consulta_mantenimientos():
     registros = Mantenimiento_equipos.query.all()
     return render_template('consulta_mante.html', registros=registros)
+
+
