@@ -3,47 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <title>Consulta de Mantenimientos</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/formulario_mante_pc.css') }}" />
+    <!-- Fuente Roboto -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- CSS personalizado -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/registros.css') }}">
 </head>
 <body>
+
 <div class="container">
-    <button id="btn-back" type="button" onclick="window.history.back()">
-      ← Volver
-    </button>
+    <button id="btn-back" type="button" onclick="window.history.back()">← Volver</button>
 
     <h2>Consulta de Registros de Mantenimiento</h2>
 
-    <table class="tabla-registros">
-        <thead>
-            <tr>
-                <th>Código STB</th>
-                <th>Nombre del Equipo</th>
-                <th>IP</th>
-                <th>Sistema Operativo</th>
-                <th>Procesador</th>
-                <th>RAM</th>
-                <th>Office</th>
-                <th>Reporte:</th>
-                <th>Acción Correctiva:</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for registro in registros %}
-            <tr>
-                <td>{{ registro.codigo_stb }}</td>
-                <td>{{ registro.nombre_equipo }}</td>
-                <td>{{ registro.ip }}</td>
-                <td>{{ registro.sistema_operativo }}</td>
-                <td>{{ registro.procesador }}</td>
-                <td>{{ registro.ram }}</td>
-                <td>{{ registro.office }}</td>
-                <td>{{ registro.reporte }}</td>
-                <td>{{ registro.accion_correctiva}}</td>
+    <!-- Contenedor de tarjetas dinámicas -->
+    <div class="registros-container">
 
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        {% for registro in registros %}
+        <div class="registro-card">
+
+            <!-- Cabecera con código y botón de editar -->
+            <div class="registro-cabecera">
+                <p><strong>Código STB:</strong> {{ registro.codigo_stb }}</p>
+                <a href="{{ url_for('form.guardar_datos', id=registro.id) }}" class="btn-editar" title="Editar">✏️</a>
+            </div>
+
+            <p><strong>Equipo:</strong> {{ registro.nombre_equipo }}</p>
+            <p><strong>IP:</strong> {{ registro.ip }}</p>
+            <p><strong>SO:</strong> {{ registro.sistema_operativo }}</p>
+            <p><strong>Procesador:</strong> {{ registro.procesador }}</p>
+            <p><strong>RAM:</strong> {{ registro.ram }}</p>
+            <p><strong>Office:</strong> {{ registro.office }}</p>
+            <p><strong>Reporte:</strong> {{ registro.reporte }}</p>
+            <p><strong>Acción Correctiva:</strong> {{ registro.accion_correctiva }}</p>
+        </div>
+        {% endfor %}
+
+    </div>
 </div>
+
 </body>
 </html>
