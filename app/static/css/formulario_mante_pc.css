@@ -101,7 +101,7 @@ textarea::placeholder {
   color: rgba(0, 0, 0, 0.5);
 }
 
-button[type="submit"] {
+#btn_guardar {
   margin-top: 20px;
   width: 100%;
   padding: 14px;
@@ -115,7 +115,7 @@ button[type="submit"] {
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-button[type="submit"]:hover {
+#btn_guardar:hover {
   background: linear-gradient(135deg, #bfbfbf, #999999);
   color: #111;
 }

@@ -11,13 +11,15 @@ def formulario():
     return render_template('datos_pc.html', usuario=session['usuario'])'''
 
 #Mostrar formulario
-@form_bp.route('/formulario')
+@form_bp.route('/formulario',methods=['GET'])
 def formulario():
-    return render_template('datos_pc.html')
+    pc = request.args.get('id')
+    return render_template('datos_pc.html', id=pc)
 
 #Guardar los datos del formulario en la base de datos
 @form_bp.route('/formulario', methods=['POST'])
 def guardar_datos():
+    #Validación de autenticación
     if 'usuario' not in session:
         return redirect(url_for('auth.index'))
 
@@ -25,29 +27,14 @@ def guardar_datos():
     if not data:
         return jsonify({'success': False, 'message': 'No se recibió JSON'}), 400
 
-    codigo_stb = data.get('codigo_stb')
-    nombre_equipo = data.get('nombre_equipo')
-    ip = data.get('ip')
-    sistema_operativo = data.get('sistema_operativo')
-    procesador = data.get('procesador')
-    ram = data.get('ram')
-    office = data.get('office')
+    # Validación para REPORTE Y ACCION CORRECTIVA
     reporte = data.get('reporte')
     accion_correctiva = data.get('accion_correctiva')
-
-    # Validaciones básicas
     if not reporte or not accion_correctiva:
         return jsonify({'success': False, 'message': 'Campos obligatorios faltantes'}), 400
 
-
-
     # Guardar en la base de datos
-    nuevo = Mantenimiento_equipos(codigo_stb=codigo_stb, nombre_equipo=nombre_equipo,
-                                  ip=ip, sistema_operativo= sistema_operativo,
-                                  procesador=procesador, ram=ram,
-                                  office= office, reporte=reporte,
-                                  accion_correctiva=accion_correctiva
-                                  )
+    nuevo = Mantenimiento_equipos(**data)
     db.session.add(nuevo)
     db.session.commit()
 
@@ -59,4 +46,39 @@ def consulta_mantenimientos():
     registros = Mantenimiento_equipos.query.all()
     return render_template('consulta_mante.html', registros=registros)
 
+#metodo que envia los datos al front para verlos en los campos correspondientes
+@form_bp.route('/api/mantenimientos/<int:id>', methods=['GET'])
+def obtener_mantenimiento(id):
+    mantenimiento = Mantenimiento_equipos.query.get_or_404(id)
+    return jsonify({
+        'id_pc': mantenimiento.id_pc,
+        'codigo_stb': mantenimiento.codigo_stb,
+        'nombre_equipo': mantenimiento.nombre_equipo,
+        'ip': mantenimiento.ip,
+        'sistema_operativo': mantenimiento.sistema_operativo,
+        'procesador': mantenimiento.procesador,
+        'ram': mantenimiento.ram,
+        'office': mantenimiento.office,
+        'reporte': mantenimiento.reporte,
+        'accion_correctiva': mantenimiento.accion_correctiva
 
+    })
+
+#Metodo para actualizar
+@form_bp.route('/api/mantenimientos/actualizar/<int:id>', methods=['POST'])
+def api_actualizar_mantenimiento(id):
+    mantenimiento = Mantenimiento_equipos.query.get_or_404(id)
+    data = request.get_json()
+
+    mantenimiento.codigo_stb = data.get('codigo_stb')
+    mantenimiento.nombre_equipo = data.get('nombre_equipo')
+    mantenimiento.ip = data.get('ip')
+    mantenimiento.sistema_operativo = data.get('sistema_operativo')
+    mantenimiento.procesador = data.get('procesador')
+    mantenimiento.ram = data.get('ram')
+    mantenimiento.office = data.get('office')
+    mantenimiento.reporte = data.get('reporte')
+    mantenimiento.accion_correctiva = data.get('accion_correctiva')
+
+    db.session.commit()
+    return jsonify({'message': 'Mantenimiento actualizado correctamente'})

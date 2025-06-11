@@ -10,36 +10,36 @@
 </head>
 <body>
 
-<div class="container">
-    <button id="btn-back" type="button" onclick="window.history.back()">← Volver</button>
+    <div class="container">
+        <button id="btn-back" type="button" onclick="window.history.back()">← Volver</button>
 
-    <h2>Consulta de Registros de Mantenimiento</h2>
+        <h2>Consulta de Registros de Mantenimiento</h2>
 
-    <!-- Contenedor de tarjetas dinámicas -->
-    <div class="registros-container">
+        <!-- Contenedor de tarjetas dinámicas -->
+        <div class="registros-container">
 
-        {% for registro in registros %}
-        <div class="registro-card">
+            {% for registro in registros %}
+            <div class="registro-card">
 
-            <!-- Cabecera con código y botón de editar -->
-            <div class="registro-cabecera">
-                <p><strong>Código STB:</strong> {{ registro.codigo_stb }}</p>
-                <a href="{{ url_for('form.guardar_datos', id=registro.id) }}" class="btn-editar" title="Editar">✏️</a>
+                <!-- Cabecera con código y botón de editar -->
+                <div class="registro-cabecera">
+                    <p><strong>Código STB:</strong> {{ registro.codigo_stb }}</p>
+                    <a href="{{ url_for('form.formulario') }}?id={{ registro.id_pc }}" class="btn-editar">✏️</a>
+                </div>
+
+                <p><strong>Equipo:</strong> {{ registro.nombre_equipo }}</p>
+                <p><strong>IP:</strong> {{ registro.ip }}</p>
+                <p><strong>SO:</strong> {{ registro.sistema_operativo }}</p>
+                <p><strong>Procesador:</strong> {{ registro.procesador }}</p>
+                <p><strong>RAM:</strong> {{ registro.ram }}</p>
+                <p><strong>Office:</strong> {{ registro.office }}</p>
+                <p><strong>Reporte:</strong> {{ registro.reporte }}</p>
+                <p><strong>Acción Correctiva:</strong> {{ registro.accion_correctiva }}</p>
             </div>
+            {% endfor %}
 
-            <p><strong>Equipo:</strong> {{ registro.nombre_equipo }}</p>
-            <p><strong>IP:</strong> {{ registro.ip }}</p>
-            <p><strong>SO:</strong> {{ registro.sistema_operativo }}</p>
-            <p><strong>Procesador:</strong> {{ registro.procesador }}</p>
-            <p><strong>RAM:</strong> {{ registro.ram }}</p>
-            <p><strong>Office:</strong> {{ registro.office }}</p>
-            <p><strong>Reporte:</strong> {{ registro.reporte }}</p>
-            <p><strong>Acción Correctiva:</strong> {{ registro.accion_correctiva }}</p>
         </div>
-        {% endfor %}
-
     </div>
-</div>
-
+    <script src="{{ url_for('static', filename='js/datos_pc.js') }}"></script>
 </body>
 </html>

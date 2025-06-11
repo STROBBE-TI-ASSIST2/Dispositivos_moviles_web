@@ -19,7 +19,7 @@
     <label class="lblQr">Escanea el QR:</label>
     <div id="reader"></div>
 
-    <form onsubmit="enviarDatos(); return false;">
+    <form id="formulario-mantenimiento"  data-id="{{ id or '' }}" data-modo="{{ 'editar' if id else 'nuevo' }}">
       <label>Código STB</label>
       <input type="text" id="codigo_stb" placeholder="Código STB" />
 
@@ -47,7 +47,7 @@
       <label>Acción Correctiva:</label>
       <textarea id="accion" rows="4" placeholder="Escribe la acción correctiva aquí"></textarea>
 
-      <button type="submit">Enviar Datos</button>
+      <button type="button" id="btn-guardar" onclick="enviarDatos()" >Enviar Datos</button>
     </form>
 
     <p id="respuesta"></p>
