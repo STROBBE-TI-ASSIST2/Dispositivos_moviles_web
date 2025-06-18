@@ -4,12 +4,6 @@ from app import db
 
 form_bp = Blueprint('form', __name__)
 
-'''@form_bp.route('/formulario')
-def formulario():
-    if 'usuario' not in session:
-        return redirect(url_for('auth.index'))  # Redirige a login si no hay sesión
-    return render_template('datos_pc.html', usuario=session['usuario'])'''
-
 #Mostrar formulario
 @form_bp.route('/formulario',methods=['GET'])
 def formulario():
@@ -65,7 +59,7 @@ def obtener_mantenimiento(id):
     })
 
 #Metodo para actualizar
-@form_bp.route('/api/mantenimientos/actualizar/<int:id>', methods=['POST'])
+@form_bp.route('/api/mantenimientos/actualizar/<int:id>', methods=['PATCH'])
 def api_actualizar_mantenimiento(id):
     mantenimiento = Mantenimiento_equipos.query.get_or_404(id)
     data = request.get_json()
@@ -82,3 +76,13 @@ def api_actualizar_mantenimiento(id):
 
     db.session.commit()
     return jsonify({'message': 'Mantenimiento actualizado correctamente'})
+
+@form_bp.route('/api/mantenimientos/<int:id>', methods=['DELETE'])
+def eliminar_mantenimiento(id):
+    if 'usuario' not in session:
+        return jsonify({'message': 'No autorizado'}), 401
+    mantenimiento = Mantenimiento_equipos.query.get_or_404(id)
+    db.session.delete(mantenimiento)
+    db.session.commit()
+    return jsonify({'message': 'Mantenimiento eliminado correctamente'})
+

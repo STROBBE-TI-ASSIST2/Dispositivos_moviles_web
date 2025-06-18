@@ -24,7 +24,8 @@
                 <!-- Cabecera con código y botón de editar -->
                 <div class="registro-cabecera">
                     <p><strong>Código STB:</strong> {{ registro.codigo_stb }}</p>
-                    <a href="{{ url_for('form.formulario') }}?id={{ registro.id_pc }}" class="btn-editar">✏️</a>
+                    <a href="{{ url_for('form.formulario') }}?id={{ registro.id_pc }}" class="btn-CRUD">✏️</a>
+                    <button onclick="eliminarMantenimiento({{ registro.id_pc }})" class="btn-CRUD">🗑️</button>
                 </div>
 
                 <p><strong>Equipo:</strong> {{ registro.nombre_equipo }}</p>
