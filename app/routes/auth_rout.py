@@ -1,5 +1,9 @@
-from flask import Blueprint, request, jsonify, session,render_template,url_for
+from flask import make_response, Blueprint, request, jsonify, session,render_template,url_for, redirect
+from flask_login import login_user, logout_user, current_user
 from app.models.model_user import Usuario
+
+
+
 
 auth_bp = Blueprint('auth', __name__)
 main_bp = Blueprint('main', __name__)
@@ -7,10 +11,16 @@ main_bp = Blueprint('main', __name__)
 
 @main_bp.route('/')
 def index():
-    return render_template('index.html')
+    if current_user.is_authenticated:
+        return redirect(url_for('menu.menu'))
+
+    response = make_response(render_template('index.html'))
+    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+    response.headers['Pragma'] = 'no-cache'
+    return response
 
 
-@auth_bp.route('/login', methods=['POST'])
+"""@auth_bp.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
     username = data.get('username')
@@ -22,5 +32,26 @@ def login():
 
         return jsonify({'success': True, 'message': 'Welcome', 'redirect': url_for('menu.formulario')}), 200
     else:
-        return jsonify({'success': False, 'message': 'Credenciales inválidas'}), 401
+        return jsonify({'success': False, 'message': 'Credenciales inválidas'}), 401"""
 
+
+@auth_bp.route('/login', methods=['POST'])
+def login():
+    if request.method == 'POST':
+        data = request.get_json()
+        username = data.get('username')
+        password = data.get('password')
+
+        user = Usuario.query.filter_by(username=username).first()
+        if user and user.password == password:
+            login_user(user)
+            return jsonify({'success': True, 'message': 'Welcome', 'redirect': url_for('menu.menu')}), 200
+        else:
+            return jsonify({'success': False, 'message': 'Credenciales inválidas'}), 401
+
+
+
+@auth_bp.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('main.index'))

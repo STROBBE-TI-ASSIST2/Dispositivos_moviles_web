@@ -1,6 +1,11 @@
 from flask import Flask
 from flask_migrate import Migrate
 from app.utils.db import db, db_uri
+from flask_login import LoginManager
+from app.models.model_user import Usuario
+
+login_manager = LoginManager()
+login_manager.login_view = 'main.index'
 
 def create_app():
 
@@ -10,16 +15,22 @@ def create_app():
     from app.routes.menu import menu_bp
     app = Flask(__name__)
 
+
     # Configuración de la base de datos
     app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.secret_key = 'clave-secreta'
 
     db.init_app(app)
-
     # Importar modelos antes de crear las tablas
-    from app.models import model_user
     migrate = Migrate(app, db)
+    login_manager.init_app(app)
+
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        return Usuario.query.get(int(user_id))
+
 
     with app.app_context():
         db.create_all()
@@ -32,3 +43,5 @@ def create_app():
     app.register_blueprint(menu_bp)
 
     return app
+
+

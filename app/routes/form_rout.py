@@ -1,11 +1,13 @@
 from flask import Blueprint, request, jsonify, session,render_template,redirect,url_for
 from app.models.mantenimento_pc import Mantenimiento_equipos
 from app import db
+from flask_login import login_required
 
 form_bp = Blueprint('form', __name__)
 
 #Mostrar formulario
 @form_bp.route('/formulario',methods=['GET'])
+@login_required
 def formulario():
     pc = request.args.get('id')
     return render_template('datos_pc.html', id=pc)
@@ -13,10 +15,6 @@ def formulario():
 #Guardar los datos del formulario en la base de datos
 @form_bp.route('/formulario', methods=['POST'])
 def guardar_datos():
-    #Validación de autenticación
-    if 'usuario' not in session:
-        return redirect(url_for('auth.index'))
-
     data = request.get_json()
     if not data:
         return jsonify({'success': False, 'message': 'No se recibió JSON'}), 400
@@ -36,6 +34,7 @@ def guardar_datos():
 
 #Consultar los datos del mantenimiento
 @form_bp.route('/consulta-mantenimientos', methods=['GET'])
+@login_required
 def consulta_mantenimientos():
     registros = Mantenimiento_equipos.query.all()
     return render_template('consulta_mante.html', registros=registros)
@@ -78,11 +77,9 @@ def api_actualizar_mantenimiento(id):
     return jsonify({'message': 'Mantenimiento actualizado correctamente'})
 
 @form_bp.route('/api/mantenimientos/<int:id>', methods=['DELETE'])
+@login_required
 def eliminar_mantenimiento(id):
-    if 'usuario' not in session:
-        return jsonify({'message': 'No autorizado'}), 401
     mantenimiento = Mantenimiento_equipos.query.get_or_404(id)
     db.session.delete(mantenimiento)
     db.session.commit()
     return jsonify({'message': 'Mantenimiento eliminado correctamente'})
-

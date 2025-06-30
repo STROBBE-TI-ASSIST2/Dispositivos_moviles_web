@@ -148,3 +148,22 @@ body {
   text-decoration: none;
   color: inherit; /* hereda el color del entorno, evita azul subrayado */
 }
+
+.logout-buttom{
+  margin-bottom: 20px;
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 8px;
+  border: none;
+  background-color: #2E6CA4;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(46, 108, 164, 0.6);
+  transition: background-color 0.3s ease;
+  user-select: none;
+  text-decoration: none;
+}
+
+.logout-buttom:hover {
+  background-color: #1f4a72;
+}
