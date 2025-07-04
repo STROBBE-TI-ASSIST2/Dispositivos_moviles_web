@@ -12,6 +12,9 @@
 
     <div class="container">
         <button id="btn-back" type="button" onclick="window.history.back()">← Volver</button>
+      <div class="top-bar">
+      <button id="btn-refresh" type="button" onclick="location.reload()">Actualizar🔂</button>
+  </div>
 
         <h2>Consulta de Registros de Mantenimiento</h2>
 
@@ -21,12 +24,15 @@
             {% for registro in registros %}
             <div class="registro-card">
 
-                <!-- Cabecera con código y botón de editar -->
-                <div class="registro-cabecera">
-                    <p><strong>Código STB:</strong> {{ registro.codigo_stb }}</p>
-                    <a href="{{ url_for('form.formulario') }}?id={{ registro.id_pc }}" class="btn-CRUD">✏️</a>
-                    <button onclick="eliminarMantenimiento({{ registro.id_pc }})" class="btn-CRUD">🗑️</button>
-                </div>
+          <!-- Cabecera con código y botones alineados -->
+          <div class="registro-cabecera">
+              <p><strong>Código STB:</strong> {{ registro.codigo_stb }}</p>
+              <div class="acciones-crud">
+                  <a href="{{ url_for('form.formulario') }}?id={{ registro.id_pc }}" class="btn-CRUD">✏️</a>
+                  <button onclick="eliminarMantenimiento({{ registro.id_pc }})" class="btn-CRUD">🗑️</button>
+              </div>
+          </div>
+
 
                 <p><strong>Equipo:</strong> {{ registro.nombre_equipo }}</p>
                 <p><strong>IP:</strong> {{ registro.ip }}</p>
@@ -44,3 +50,4 @@
     <script src="{{ url_for('static', filename='js/datos_pc.js') }}"></script>
 </body>
 </html>
+

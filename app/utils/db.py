@@ -1,7 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
 import urllib
-
-
 import os
 from dotenv import load_dotenv
 
@@ -13,7 +11,6 @@ database = os.getenv("SQL_DATABASE")
 username = os.getenv("SQL_USER")
 password = os.getenv("SQL_PASSWORD")
 
-print("DEBUG:", server, database, username, password)  # Puedes borrar esto
 # Codificar los parámetros para SQL Server
 params = urllib.parse.quote_plus(
     f"DRIVER={{ODBC Driver 17 for SQL Server}};"

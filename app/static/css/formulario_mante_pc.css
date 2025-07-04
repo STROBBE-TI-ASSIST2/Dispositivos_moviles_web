@@ -174,3 +174,38 @@ textarea::placeholder {
   }
 }
 
+.form-container {
+  width: 100%;
+  max-width: 700px;
+  margin: auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+input, textarea {
+  width: 100%;
+  font-size: 1.1rem;
+  padding: 10px;
+  margin-bottom: 12px;
+  box-sizing: border-box;
+}
+
+/* Responsive para pantallas pequeñas */
+@media (max-width: 600px) {
+  h2 {
+    font-size: 20px;
+  }
+
+  .btn {
+    font-size: 16px;
+    padding: 10px 14px;
+  }
+
+  label {
+    font-size: 14px;
+  }
+
+  input, textarea {
+    font-size: 16px;
+  }
+}

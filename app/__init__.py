@@ -3,7 +3,7 @@ from flask_migrate import Migrate
 from app.utils.db import db, db_uri
 from flask_login import LoginManager
 from app.models.model_user import Usuario
-
+from app.routes.reportes_rout import reportes
 login_manager = LoginManager()
 login_manager.login_view = 'main.index'
 
@@ -13,7 +13,9 @@ def create_app():
     from app.routes.auth_rout import auth_bp
     from app.routes.form_rout import form_bp
     from app.routes.menu import menu_bp
+    from app.routes.reportes_rout import reportes
     app = Flask(__name__)
+
 
 
     # Configuración de la base de datos
@@ -41,7 +43,9 @@ def create_app():
     app.register_blueprint(main_bp)
     app.register_blueprint(form_bp)
     app.register_blueprint(menu_bp)
-
+    app.register_blueprint(reportes)
     return app
+
+
 
 

@@ -31,9 +31,9 @@
       <a href="{{ url_for('form.consulta_mantenimientos') }}" class="icon-box">
         <img src="static/Imagenes/CONSULTA.png" alt="Botón 2" />
       </a>
-      <div class="icon-box">
-        <img src="static/Imagenes/REPORTE.png" alt="Botón 3" />
-      </div>
+       <a href="{{ url_for('reportes.vista_reportes') }}" class="icon-box">
+        <img src="{{ url_for('static', filename='Imagenes/REPORTE.png') }}" alt="Reporte Data Registrada" />
+      </a>
       <div class="icon-box">
         <img src="static/Imagenes/PROXIMAMENTE.png" alt="Botón 4" />
       </div>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Reportes Personalizados</title>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/reportes.css') }}" />
+</head>
+<body>
+  <div class="form-container">
+
+    <button id="btn-back" type="button" onclick="window.history.back()" class="btn">
+      ← Volver
+    </button>
+
+    <h2>Generar Reporte Personalizado</h2>
+
+    <form id="form-reporte" method="POST" action="{{ url_for('reportes.generar_reporte') }}">
+      <label>Selecciona las columnas para el reporte:</label>
+      <div class="checkbox-group">
+        {% for columna in columnas %}
+          <label>
+            <input type="checkbox" name="columnas" value="{{ columna }}">
+            {{ columna.replace('_', ' ').capitalize() }}
+          </label>
+        {% endfor %}
+      </div>
+
+      <button type="submit" class="btn">📥 Generar y Exportar Excel</button>
+    </form>
+
+    <h3 style="margin-top: 40px;">Visualización (Power BI)</h3>
+    <div class="iframe-container" style="text-align: center;">
+      <a href="https://app.powerbi.com/reportEmbed?reportId=53d92588-d130-4c37-8e71-7bdc9b6b4960&autoAuth=true&ctid=a41df90d-82cb-4bcb-bb62-0451956efc4e&actionBarEnabled=true"
+         target="_blank"
+         class="btn-powerbi">
+        📊 Ver Dashboard Power BI
+      </a>
+    </div>
+
+  </div>
+  <script src="{{ url_for('static', filename='js/reportes.js') }}"></script>
+</body>
+</html>
