@@ -1,7 +1,12 @@
 from flask import Blueprint, request, jsonify, session,render_template,redirect,url_for
-from app.models.mantenimento_pc import Mantenimiento_equipos
+from db_schema.models_mantenimiento import Mantenimiento
+from sqlalchemy import select
+from flask import abort
+
+
 from app import db
 from flask_login import login_required
+
 
 form_bp = Blueprint('form', __name__)
 
@@ -26,7 +31,7 @@ def guardar_datos():
         return jsonify({'success': False, 'message': 'Campos obligatorios faltantes'}), 400
 
     # Guardar en la base de datos
-    nuevo = Mantenimiento_equipos(**data)
+    nuevo = Mantenimiento(**data)
     db.session.add(nuevo)
     db.session.commit()
 
@@ -36,13 +41,16 @@ def guardar_datos():
 @form_bp.route('/consulta-mantenimientos', methods=['GET'])
 @login_required
 def consulta_mantenimientos():
-    registros = Mantenimiento_equipos.query.all()
+    registros = db.session.execute(
+        select(Mantenimiento)
+    ).scalars().all()
     return render_template('consulta_mante.html', registros=registros)
 
 #metodo que envia los datos al front para verlos en los campos correspondientes
 @form_bp.route('/api/mantenimientos/<int:id>', methods=['GET'])
 def obtener_mantenimiento(id):
-    mantenimiento = Mantenimiento_equipos.query.get_or_404(id)
+    #mantenimiento = Mantenimiento.query.get_or_404(id)
+    mantenimiento = db.session.get(Mantenimiento, id) or abort(404)
     return jsonify({
         'id_pc': mantenimiento.id_pc,
         'codigo_stb': mantenimiento.codigo_stb,
@@ -60,7 +68,7 @@ def obtener_mantenimiento(id):
 #Metodo para actualizar
 @form_bp.route('/api/mantenimientos/actualizar/<int:id>', methods=['PATCH'])
 def api_actualizar_mantenimiento(id):
-    mantenimiento = Mantenimiento_equipos.query.get_or_404(id)
+    mantenimiento = db.session.get(Mantenimiento, id) or abort(404)
     data = request.get_json()
 
     mantenimiento.codigo_stb = data.get('codigo_stb')
@@ -79,7 +87,10 @@ def api_actualizar_mantenimiento(id):
 @form_bp.route('/api/mantenimientos/<int:id>', methods=['DELETE'])
 @login_required
 def eliminar_mantenimiento(id):
-    mantenimiento = Mantenimiento_equipos.query.get_or_404(id)
+    mantenimiento = db.session.get(Mantenimiento, id) or abort(404)
     db.session.delete(mantenimiento)
     db.session.commit()
     return jsonify({'message': 'Mantenimiento eliminado correctamente'})
+
+
+##########################

@@ -1,51 +1,63 @@
+import importlib
+import pkgutil
 from flask import Flask
 from flask_migrate import Migrate
-from app.utils.db import db, db_uri
 from flask_login import LoginManager
-from app.models.model_user import Usuario
-from app.routes.reportes_rout import reportes
+from pathlib import Path
+import db_schema  # >>> para ubicar la carpeta de migraciones del paquete
+
+from app.utils.db import db, db_uri
+from db_schema.models_generales import Usuario  # >>> modelo desde el paquete
+from db_schema.models_tickets import ReqEquipoRed
+
 login_manager = LoginManager()
 login_manager.login_view = 'main.index'
 
-def create_app():
+#Fncion que me muestra todos modelos de db_schema
+def _import_all_db_schema_models():
+    # carga todo excepto el paquete de migraciones
+    for _, name, _ in pkgutil.walk_packages(db_schema.__path__, db_schema.__name__ + "."):
+        if ".migrations" in name:
+            continue
+        importlib.import_module(name)
 
-    from app.routes.auth_rout import main_bp
-    from app.routes.auth_rout import auth_bp
+def create_app():
+    from app.routes.auth_rout import main_bp, auth_bp
     from app.routes.form_rout import form_bp
     from app.routes.menu import menu_bp
     from app.routes.reportes_rout import reportes
+
     app = Flask(__name__)
-
-
-
-    # Configuración de la base de datos
     app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.secret_key = 'clave-secreta'
 
     db.init_app(app)
-    # Importar modelos antes de crear las tablas
-    migrate = Migrate(app, db)
-    login_manager.init_app(app)
 
+    # >>> Fuerza import de modelos del paquete para que Alembic “los vea”
+    #import db_schema.models_tickets.usuario
+    #import db_schema.models_tickets.mantenimiento  # si lo usas
+
+    _import_all_db_schema_models()
+
+    # >>> Muy importante: apuntar Migrate al repo de migraciones del paquete
+    MIGRATIONS_DIR = Path(db_schema.__file__).parent / "migrations"
+    Migrate(app, db, directory=str(MIGRATIONS_DIR))
+    login_manager.init_app(app)
 
     @login_manager.user_loader
     def load_user(user_id):
-        return Usuario.query.get(int(user_id))
+        # >>> En SQLAlchemy 2.x es mejor usar session.get
+        return db.session.get(Usuario, int(user_id))
 
-
-    with app.app_context():
-        db.create_all()
+    # >>> Quita create_all(): usarás migraciones (upgrade), no create_all()
+    # with app.app_context():
+    #     db.create_all()
 
     # Registrar rutas
-
     app.register_blueprint(auth_bp)
     app.register_blueprint(main_bp)
     app.register_blueprint(form_bp)
     app.register_blueprint(menu_bp)
     app.register_blueprint(reportes)
     return app
-
-
-
-

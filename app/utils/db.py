@@ -2,6 +2,9 @@ from flask_sqlalchemy import SQLAlchemy
 import urllib
 import os
 from dotenv import load_dotenv
+from db_schema import Base
+
+
 
 load_dotenv()
 
@@ -24,5 +27,5 @@ params = urllib.parse.quote_plus(
 db_uri = f"mssql+pyodbc:///?odbc_connect={params}"
 
 # Crear instancia de SQLAlchemy sin pasar app (para usarla con init_app)
-db = SQLAlchemy()
+db = SQLAlchemy(model_class=Base)
 

@@ -1,6 +1,10 @@
 from flask import make_response, Blueprint, request, jsonify, session,render_template,url_for, redirect
 from flask_login import login_user, logout_user, current_user
-from app.models.model_user import Usuario
+from db_schema.models_generales import Usuario
+from db_schema.models_mantenimiento import Mantenimiento
+
+from sqlalchemy import select
+from app.utils.db import db
 
 
 
@@ -42,7 +46,10 @@ def login():
         username = data.get('username')
         password = data.get('password')
 
-        user = Usuario.query.filter_by(username=username).first()
+        #user = Usuario.query.filter_by(username=username).first()
+        user = db.session.execute(
+            select(Usuario).where(Usuario.username == username)
+        ).scalar_one_or_none()
         if user and user.password == password:
             login_user(user)
             return jsonify({'success': True, 'message': 'Welcome', 'redirect': url_for('menu.menu')}), 200
