@@ -8,7 +8,8 @@ import db_schema  # >>> para ubicar la carpeta de migraciones del paquete
 
 from app.utils.db import db, db_uri
 from db_schema.models_generales import Usuario  # >>> modelo desde el paquete
-from db_schema.models_tickets import ReqEquipoRed
+from db_schema.models_generales import Usuario
+from db_schema.models_mantenimiento import Usuario_mantto
 
 login_manager = LoginManager()
 login_manager.login_view = 'main.index'
@@ -48,7 +49,7 @@ def create_app():
     @login_manager.user_loader
     def load_user(user_id):
         # >>> En SQLAlchemy 2.x es mejor usar session.get
-        return db.session.get(Usuario, int(user_id))
+        return db.session.get(Usuario_mantto, int(user_id))
 
     # >>> Quita create_all(): usarás migraciones (upgrade), no create_all()
     # with app.app_context():

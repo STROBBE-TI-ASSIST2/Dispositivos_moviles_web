@@ -2,16 +2,13 @@ from flask import make_response, Blueprint, request, jsonify, session,render_tem
 from flask_login import login_user, logout_user, current_user
 from db_schema.models_generales import Usuario
 from db_schema.models_mantenimiento import Mantenimiento
+from db_schema.models_mantenimiento import Usuario_mantto
 
 from sqlalchemy import select
 from app.utils.db import db
 
-
-
-
 auth_bp = Blueprint('auth', __name__)
 main_bp = Blueprint('main', __name__)
-
 
 @main_bp.route('/')
 def index():
@@ -22,7 +19,6 @@ def index():
     response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
     response.headers['Pragma'] = 'no-cache'
     return response
-
 
 """@auth_bp.route('/login', methods=['POST'])
 def login():
@@ -38,7 +34,6 @@ def login():
     else:
         return jsonify({'success': False, 'message': 'Credenciales inválidas'}), 401"""
 
-
 @auth_bp.route('/login', methods=['POST'])
 def login():
     if request.method == 'POST':
@@ -48,15 +43,13 @@ def login():
 
         #user = Usuario.query.filter_by(username=username).first()
         user = db.session.execute(
-            select(Usuario).where(Usuario.username == username)
+            select(Usuario_mantto).where(Usuario_mantto.username == username)
         ).scalar_one_or_none()
-        if user and user.password == password:
+        if user and user.passwordd == password:
             login_user(user)
             return jsonify({'success': True, 'message': 'Welcome', 'redirect': url_for('menu.menu')}), 200
         else:
             return jsonify({'success': False, 'message': 'Credenciales inválidas'}), 401
-
-
 
 @auth_bp.route('/logout')
 def logout():

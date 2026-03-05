@@ -3,10 +3,8 @@ from db_schema.models_mantenimiento import Mantenimiento
 from sqlalchemy import select
 from flask import abort
 
-
 from app import db
 from flask_login import login_required
-
 
 form_bp = Blueprint('form', __name__)
 
@@ -91,6 +89,5 @@ def eliminar_mantenimiento(id):
     db.session.delete(mantenimiento)
     db.session.commit()
     return jsonify({'message': 'Mantenimiento eliminado correctamente'})
-
 
 ##########################

@@ -1,12 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
 import urllib
 import os
-from dotenv import load_dotenv
 from db_schema import Base
 
-
-
-load_dotenv()
 
 # Leer credenciales desde el .env
 server = os.getenv("SQL_SERVER")
@@ -17,15 +13,15 @@ password = os.getenv("SQL_PASSWORD")
 # Codificar los parámetros para SQL Server
 params = urllib.parse.quote_plus(
     f"DRIVER={{ODBC Driver 17 for SQL Server}};"
-    f"SERVER={server};"
+    f"SERVER={server};" 
     f"DATABASE={database};"
     f"UID={username};"
     f"PWD={password}"
 )
+
 
 # Crear la URI de conexión
 db_uri = f"mssql+pyodbc:///?odbc_connect={params}"
 
 # Crear instancia de SQLAlchemy sin pasar app (para usarla con init_app)
 db = SQLAlchemy(model_class=Base)
-
